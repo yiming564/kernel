@@ -1,0 +1,3 @@
+*.asm linguist-language=C
+*.S linguist-language=C
+makefile linguist-language=C
