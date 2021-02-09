@@ -31,12 +31,34 @@
 	mov	ax,	1301h
 	mov	bx,	000fh
 	mov	dx,	0000h
-	mov	cx,	25
+	mov	cx,	12
 	mov	bp,	log
 	int	10h
 	
+; try extend int 13h
 
-log:	db	"Root Loader Stage1 loaded"
+	mov ah, 0x41
+	mov bx, 0x55aa
+	mov dl, 0x80
+	int 13h
+	
+	jc LBANoSupport
+
+
+; this is only a tmp solution, we will finish the CHS mode soon.
+
+LBANoSupport:
+	
+	mov	ax,	1301h
+	mov	bx,	000fh
+	mov	dx,	0000h
+	mov	cx,	12
+	mov	bp,	log
+	int	10h
+	jmp $
+
+log:				db	"boot.bin [y]"
+LBANoSupport_msg:	db	"LBA Support [n]"
 	
 
 	times 446 - ($ - $$) db 0

@@ -7,5 +7,5 @@ OBJS = boot.bin loader.bin
 all: $(OBJS)
 
 clean: 
-	rm -rf *.bin *.o *.obj *~ *.swp *.swo
+	rm -rf *.bin *.o *.obj *~ *.swp *.swo *.swa
 	
