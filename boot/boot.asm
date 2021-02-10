@@ -56,6 +56,13 @@ LBANoSupport:
 	mov	bp,	log
 	int	10h
 	jmp $
+	
+
+	
+	
+_io_block:
+	
+	ret
 
 log:				db	"boot.bin [y]"
 LBANoSupport_msg:	db	"LBA Support [n]"
