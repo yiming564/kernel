@@ -62,6 +62,11 @@ LBANoSupport:
 	
 _io_block:
 	
+	push word 00h
+	push word 00h
+	push word 00h
+	push word cx
+	
 	ret
 
 log:				db	"boot.bin [y]"
