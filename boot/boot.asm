@@ -89,6 +89,11 @@ Label_Start:
 	add ax, word [BPB_HiddSec32]
 	add ax, word [BPB_RsvdSecCnt]
 	mov cx, ax
+	mov dx, 0
+	mov bx, 0x8000
+	call _io_block
+	
+	jc ReadFAT32DirectoryError
 
 
 ; this is only a tmp solution, we will finish the CHS mode soon.
@@ -96,14 +101,22 @@ Label_Start:
 LBANoSupport:
 	
 	mov	ax,	1301h
-	mov	bx,	000fh
-	mov	dx,	0000h
+	mov	bx,	0004h
+	mov	dx,	0100h
 	mov	cx,	12
-	mov	bp,	log
+	mov	bp,	LBANoSupport_msg
 	int	10h
 	jmp $
 	
-
+ReadFAT32DirectoryError:
+	
+	mov	ax,	1301h
+	mov	bx,	0004h
+	mov	dx,	0000h
+	mov	cx,	18
+	mov	bp,	ReadFAT32DirectoryError_msg
+	int	10h
+	jmp $
 
 ; function name: _io_block
 ; operate failed: CF = 1
@@ -151,8 +164,9 @@ _io_block:
 	
 	ret
 
-log:				db	"boot.bin [y]"
-LBANoSupport_msg:	db	"LBA Support [n]"
+log:							db	"boot.bin [y]"
+LBANoSupport_msg:				db	"LBA Support [n]"
+ReadFAT32DirectoryError_msg:	db	"Read Directory [n]"
 	
 
 	times 446 - ($ - $$) db 0
