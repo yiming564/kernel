@@ -83,7 +83,12 @@ Label_Start:
 	
 ; read FAT32 Directory
 	
-	mov dx, 0
+	mov ax, word [BPB_FATSz32]
+	mov dl, byte [BPB_NumFATs]
+	mul dl
+	add ax, word [BPB_HiddSec32]
+	add ax, word [BPB_RsvdSecCnt]
+	mov cx, ax
 
 
 ; this is only a tmp solution, we will finish the CHS mode soon.
