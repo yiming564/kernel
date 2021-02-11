@@ -1,7 +1,44 @@
 
-; This file is used to load loader.bin in the FAT32/LUFS.
+%include "../include/boot.inc"
+
+; This file is used to load loader.bin in the FAT32.
 
 	org 0x7c00
+	
+	jmp Label_Start
+	nop
+	
+	db	"mkfs.fat"		; OEM name
+	
+;=======	BPB Reserved Region
+
+BPB_BytesPerSec		dw	512
+BPB_SecPerClus		db	32
+BPB_RsvdSecCnt		dw	32
+BPB_NumFATs			db	2
+BPB_RootEntCnt		dw	0
+BPB_TotSec16		dw	0
+BPB_Media			db	0xf8
+BPB_FATSz16			dw	0
+BPB_SecPerTrk		dw	32
+BPB_NumHeads		dw	64
+BPB_HiddSec32		dd	0x0800
+BPB_TotSec32		dd	0x03a97800
+BPB_FATSz32			dd	0x3a91
+BPB_ExtFlags		dw	0x0000
+BPB_FSVer			dw	0
+BPB_RootClus		dd	2
+BPB_FSInfo			dw	1
+BPB_BkBootSec		dw	6
+BPB_Reserved		times 12 db 0
+BPB_DrvNum			db	0x80
+BPB_Reserved1		db	0x01
+BPB_BootSig			db	0x29
+BPB_VolID			dd	0x0eb2936d
+BPB_VolLab			db	"kernel     "
+BPB_FilSysType		db	"FAT32   "
+
+Label_Start:
 	
 ; reset registers
 	
@@ -43,6 +80,10 @@
 	int 13h
 	
 	jc LBANoSupport
+	
+; read FAT32 Directory
+	
+	mov dx, 0
 
 
 ; this is only a tmp solution, we will finish the CHS mode soon.
@@ -58,14 +99,50 @@ LBANoSupport:
 	jmp $
 	
 
-	
+
+; function name: _io_block
+; operate failed: CF = 1
+; cx = disk LBA number (low 8 bit)
+; dx = disk LBA number (mid 8 bit)
+; disk transfer limit = 2048GiB
+; es = segment
+; bx = offset
+
 	
 _io_block:
 	
-	push word 00h
-	push word 00h
-	push word 00h
-	push word cx
+; disk LBA number
+
+	push word 00h		; high
+	push word 00h		; high
+	push word dx		; mid
+	push word cx		; low
+	
+; buffer address
+
+	push word es		; segment
+	push word bx		; offset
+	
+; sector number
+; NOTE: only one, if you want to read more, use register instead
+; But sometimes it will magically go wrong
+	
+	push word 1
+	
+	push byte reserved
+	
+	push byte 10h		; 32bit LBA
+	
+; TODO: make a 64bit LBA _io_block
+
+%ifdef floppy
+	mov dl, 00h
+%else
+	mov dl, 80h
+%endif
+	
+	mov si, sp
+	int 13h
 	
 	ret
 
@@ -75,3 +152,4 @@ LBANoSupport_msg:	db	"LBA Support [n]"
 
 	times 446 - ($ - $$) db 0
 	dw 0xaa55
+	

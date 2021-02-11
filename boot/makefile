@@ -2,10 +2,14 @@
 include ../include/rules.make
 
 OBJS = boot.bin loader.bin
-.PHONY: clean
+.PHONY: clean clean_backup
 
 all: $(OBJS)
-
+	
+clean_backup:
+	rm -rf *~ *.swp *.swo *.swa
+	
 clean: 
-	rm -rf *.bin *.o *.obj *~ *.swp *.swo *.swa
+	$(MAKE) -C . clean_backup
+	rm -rf *.bin *.o *.obj
 	
