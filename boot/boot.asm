@@ -168,14 +168,31 @@ _io_block:
 	ret
 	
 ; function name: _Find_Filename
-; operate failed: CF = 1
+; operate failed: ax = 1
 ; si = buffer base
 ; di = filename
 
 _Find_Filename:
 	
+	mov cx, 11			; TODO: find the correct number
+
+next_char:
 	
+	mov ax, [si]
+	mov bx, [di]
+	cmp ax, bx
+	jne not_true
+	inc si
+	inc di
 	
+	loop next_char	
+	
+	mov ax, 0
+	ret
+	
+not_true:
+
+	mov ax, 1
 	ret
 
 log:							db	"boot.bin [y]"
