@@ -1,4 +1,6 @@
 
+MAKEFLAGS+= --no-print-directory
+
 .PHONY: clean clean_backup
 
 all:

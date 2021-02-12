@@ -10,7 +10,7 @@
 	
 	db	"mkfs.fat"		; OEM name
 	
-;=======	BPB Reserved Region
+; BPB Reserved Region
 
 BPB_BytesPerSec		dw	512
 BPB_SecPerClus		db	32
@@ -94,7 +94,10 @@ Label_Start:
 	call _io_block
 	
 	jc ReadFAT32DirectoryError
-
+	
+; find filename from Directory
+	
+	
 
 ; this is only a tmp solution, we will finish the CHS mode soon.
 
@@ -163,12 +166,25 @@ _io_block:
 	int 13h
 	
 	ret
+	
+; function name: _Find_Filename
+; operate failed: CF = 1
+; si = buffer base
+; di = filename
+
+_Find_Filename:
+	
+	
+	
+	ret
 
 log:							db	"boot.bin [y]"
 LBANoSupport_msg:				db	"LBA Support [n]"
 ReadFAT32DirectoryError_msg:	db	"Read Directory [n]"
+LoaderPathName:					db	"BOOT       "
+LoaderFileName:					db	"LOADER  BIN"
 	
 
-	times 446 - ($ - $$) db 0
+	times 510 - ($ - $$) db 0
 	dw 0xaa55
 	
