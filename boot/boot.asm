@@ -95,6 +95,12 @@ Label_Start:
 	
 	jc ReadFAT32DirectoryError
 	
+; tmp start
+
+	
+
+; tmp end
+	
 ; find filename from Directory
 	
 	
