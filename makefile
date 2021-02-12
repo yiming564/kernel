@@ -20,5 +20,5 @@ clean_backup:
 	rm -rf *~ *.swp *.swo *.swa
 	
 push:
-	./git.sh
+	./.git.sh
 	
