@@ -1,7 +1,7 @@
 
 MAKEFLAGS += --no-print-directory
 
-IMAGE = image
+IMAGE = image_disk
 IMAGEMOUNTPATH = mnt/
 
 DD = dd
@@ -14,7 +14,12 @@ OBJS = boot/boot.bin boot/loader.bin
 all:
 	@$(MAKE) -C boot
 	
+install:
+	@$(MAKE) -C . image
+	$(DD) if=image of=/dev/sdb1 bs=1024k count=32 $(DDFLAGS)
+	
 image:
+	@$(MAKE) -C . image_disk
 	$(DD) if=.refresh of=$(IMAGE) bs=1 count=1008 seek=1004 $(DDFLAGS)
 	@$(MAKE) -C . mount
 	-@$(MAKE) -C . image_main
@@ -28,6 +33,10 @@ umount:
 	
 image_main: .refresh
 	@$(MAKE) -C boot image_main
+	
+image_disk:
+	touch $(IMAGE)
+	$(SUDO) $(DD) if=/dev/sdb1 of=$(IMAGE) bs=1024k count=32
 	
 clean:
 	@$(MAKE) -C . clean_backup

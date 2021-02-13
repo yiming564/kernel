@@ -5,7 +5,7 @@ ASM = nasm
 CC = gcc
 CFLAGS = -Wall -O2
 
-IMAGE = ../image
+IMAGE = ../image_disk
 IMAGEMOUNTPATH = ../mnt/
 
 DD = dd

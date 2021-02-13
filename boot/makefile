@@ -7,7 +7,7 @@ OBJS = boot.bin loader.bin
 all: $(OBJS)
 	
 image_main:
-	$(MAKE) -C . 
+	@$(MAKE) -C . 
 	$(DD) if=boot.bin of=$(IMAGE) bs=512 count=1 $(DDFLAGS)
 	$(SUDO) cp loader.bin $(IMAGEMOUNTPATH)
 	
