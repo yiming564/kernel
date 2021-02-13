@@ -92,21 +92,21 @@ Label_Start:
 	mov dx, 0
 	mov bx, 0x8000
 	call _io_block
-	
-	jc ReadFAT32DirectoryError
+	;cmp ax, 0
+	;jne ReadFAT32DirectoryError
 	
 ; tmp start
 
 	mov	ax,	1301h
-	mov	bx,	0004h
-	mov	dx,	0200h
+	mov	bx,	0002h
+	mov	dx,	0500h
 	mov	cx,	18
 	mov	bp,	ReadFAT32DirectorySuccess_msg
 	int	10h
 
 	mov	ax,	1301h
 	mov	bx,	000fh
-	mov	dx,	0300h
+	mov	dx,	0800h
 	mov	cx,	0x80
 	mov	bp,	0x8000
 	int	10h
@@ -141,7 +141,7 @@ ReadFAT32DirectoryError:
 	jmp $
 
 ; function name: _io_block
-; operate failed: CF = 1
+; operate failed: AX = 1
 ; cx = disk LBA number (low 8 bit)
 ; dx = disk LBA number (mid 8 bit)
 ; disk transfer limit = 2048GiB
@@ -184,6 +184,14 @@ _io_block:
 	mov si, sp
 	int 13h
 	
+	jc _io_block_error
+	add sp, 16
+	mov ax, 0
+	ret
+	
+_io_block_error:
+	add sp, 16
+	mov ax, 1
 	ret
 	
 ; function name: _Find_Filename
