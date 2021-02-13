@@ -97,7 +97,20 @@ Label_Start:
 	
 ; tmp start
 
-	
+	mov	ax,	1301h
+	mov	bx,	0004h
+	mov	dx,	0200h
+	mov	cx,	18
+	mov	bp,	ReadFAT32DirectorySuccess_msg
+	int	10h
+
+	mov	ax,	1301h
+	mov	bx,	000fh
+	mov	dx,	0300h
+	mov	cx,	0x80
+	mov	bp,	0x8000
+	int	10h
+	jmp $
 
 ; tmp end
 	
@@ -156,17 +169,17 @@ _io_block:
 	
 	push word 1
 	
-	push byte reserved
-	
-	push byte 10h		; 32bit LBA
+	push word 10h		; 32bit LBA
 	
 ; TODO: make a 64bit LBA _io_block
 
-%ifdef floppy
-	mov dl, 00h
-%else
+	mov ah, 42h
+
+;%ifdef floppy
+;	mov dl, 00h
+;%else
 	mov dl, 80h
-%endif
+;%endif
 	
 	mov si, sp
 	int 13h
@@ -204,6 +217,7 @@ not_true:
 log:							db	"boot.bin [y]"
 LBANoSupport_msg:				db	"LBA Support [n]"
 ReadFAT32DirectoryError_msg:	db	"Read Directory [n]"
+ReadFAT32DirectorySuccess_msg:	db	"Read Directory [y]"
 LoaderPathName:					db	"BOOT       "
 LoaderFileName:					db	"LOADER  BIN"
 	

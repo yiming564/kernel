@@ -16,7 +16,7 @@ all:
 	
 install:
 	@$(MAKE) -C . image
-	$(DD) if=image of=/dev/sdb1 bs=1024k count=32 $(DDFLAGS)
+	$(SUDO) $(DD) if=$(IMAGE) of=/dev/sdb1 bs=1024k count=32 $(DDFLAGS)
 	
 image:
 	@$(MAKE) -C . image_disk
