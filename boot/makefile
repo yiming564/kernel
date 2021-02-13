@@ -8,8 +8,8 @@ all: $(OBJS)
 	
 image_main:
 	$(MAKE) -C . 
-	dd if=boot.bin of=../image bs=512 count=1 conv=notrunc
-	sudo cp loader.bin ../mnt/
+	$(DD) if=boot.bin of=$(IMAGE) bs=512 count=1 $(DDFLAGS)
+	$(SUDO) cp loader.bin $(IMAGEMOUNTPATH)
 	
 clean_backup:
 	rm -rf *~ *.swp *.swo *.swa

@@ -1,23 +1,30 @@
 
 MAKEFLAGS += --no-print-directory
 
-.PHONY: clean clean_backup image
+IMAGE = image
+IMAGEMOUNTPATH = mnt/
+
+DD = dd
+DDFLAGS = conv=notrunc
+SUDO = sudo
+
+.PHONY: clean clean_backup image mount umount image_main
 OBJS = boot/boot.bin boot/loader.bin
 
 all:
 	@$(MAKE) -C boot
 	
 image:
-	dd if=.refresh of=image bs=1 count=1008 seek=1004 conv=notrunc
+	$(DD) if=.refresh of=$(IMAGE) bs=1 count=1008 seek=1004 $(DDFLAGS)
 	@$(MAKE) -C . mount
 	-@$(MAKE) -C . image_main
 	@$(MAKE) -C . umount
 	
 mount:
-	sudo mount image mnt/ -t vfat -o loop
+	$(SUDO) mount $(IMAGE) $(IMAGEMOUNTPATH) -t vfat -o loop
 	
 umount:
-	sudo umount mnt/
+	$(SUDO) umount $(IMAGEMOUNTPATH)
 	
 image_main: .refresh
 	@$(MAKE) -C boot image_main
