@@ -6,6 +6,11 @@ OBJS = boot.bin loader.bin
 
 all: $(OBJS)
 	
+image_main:
+	$(MAKE) -C . 
+	dd if=boot.bin of=../image bs=512 count=1 conv=notrunc
+	sudo cp loader.bin ../mnt/
+	
 clean_backup:
 	rm -rf *~ *.swp *.swo *.swa
 	
