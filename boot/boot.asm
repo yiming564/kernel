@@ -106,11 +106,19 @@ Label_Start:
 	
 ; find filename from Directory
 	
+	mov cx, 8
 	mov si, 0x8000
-	mov di, TMPFileName
+	mov di, LoaderFileName
+	
+Loader_File_Name_Wrong:
 	call _Find_Filename
 	cmp ax, 0
-	jne LBANoSupport
+	je Loader_File_Name_Finded
+	add si, 0x20
+	loop Loader_File_Name_Wrong
+	jmp LBANoSupport
+	
+Loader_File_Name_Finded:
 	jmp $
 	
 
