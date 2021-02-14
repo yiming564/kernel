@@ -9,7 +9,7 @@ IMAGE = ../image_disk
 IMAGEMOUNTPATH = ../mnt/
 
 DD = dd
-DDFLAGS = conv=notrunc
+DDFLAGS = conv=notrunc 2>> ../build.log
 SUDO = sudo
 
 %.bin: %.asm

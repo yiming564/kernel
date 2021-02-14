@@ -12,7 +12,7 @@ image_main:
 	$(SUDO) cp loader.bin $(IMAGEMOUNTPATH)
 	
 clean_backup:
-	rm -rf *~ *.swp *.swo *.swa
+	rm -rf *~ *.swp *.swo *.swa *.log
 	
 clean: 
 	@$(MAKE) -C . clean_backup

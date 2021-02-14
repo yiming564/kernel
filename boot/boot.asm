@@ -83,31 +83,22 @@ Label_Start:
 	
 ; read FAT32 Directory
 	
-	mov ax, word [BPB_FATSz32]
-	mov dl, byte [BPB_NumFATs]
-	mul dl
-	add ax, word [BPB_HiddSec32]
-	add ax, word [BPB_RsvdSecCnt]
-	mov cx, ax
+	mov cx, word [BPB_FATSz32]
+	add cx, cx
+	add cx, word [BPB_HiddSec32]
+	add cx, word [BPB_RsvdSecCnt]
 	mov dx, 0
 	mov bx, 0x8000
 	call _io_block
-	;cmp ax, 0
-	;jne ReadFAT32DirectoryError
+	cmp ax, 0
+	jne ReadFAT32DirectoryError
 	
 ; tmp start
 
 	mov	ax,	1301h
-	mov	bx,	0002h
-	mov	dx,	0500h
-	mov	cx,	18
-	mov	bp,	ReadFAT32DirectorySuccess_msg
-	int	10h
-
-	mov	ax,	1301h
 	mov	bx,	000fh
-	mov	dx,	0800h
-	mov	cx,	0x80
+	mov	dx,	0100h
+	mov	cx,	0x100
 	mov	bp,	0x8000
 	int	10h
 	jmp $

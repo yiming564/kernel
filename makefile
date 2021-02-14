@@ -5,7 +5,7 @@ IMAGE = image_disk
 IMAGEMOUNTPATH = mnt/
 
 DD = dd
-DDFLAGS = conv=notrunc
+DDFLAGS = conv=notrunc 2>> build.log
 SUDO = sudo
 
 .PHONY: clean clean_backup image mount umount image_main
@@ -19,6 +19,7 @@ install:
 	$(SUDO) $(DD) if=$(IMAGE) of=/dev/sdb1 bs=1024k count=32 $(DDFLAGS)
 	
 image:
+	@./get_time.sh
 	@$(MAKE) -C . image_disk
 	$(DD) if=.refresh of=$(IMAGE) bs=1 count=1008 seek=1004 $(DDFLAGS)
 	@$(MAKE) -C . mount
@@ -43,13 +44,15 @@ clean:
 	@$(MAKE) -C boot clean
 	@$(MAKE) -C etc clean
 	@$(MAKE) -C include clean
+	@$(MAKE) -C kernel clean
 	rm -rf *.bin *.o *.obj
 	
 clean_backup:
 	@$(MAKE) -C boot clean_backup
 	@$(MAKE) -C etc clean_backup
 	@$(MAKE) -C include clean_backup
-	rm -rf *~ *.swp *.swo *.swa
+	@$(MAKE) -C kernel clean_backup
+	rm -rf *~ *.swp *.swo *.swa *.log
 	
 push:
 	./.git.sh
