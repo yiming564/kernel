@@ -101,12 +101,17 @@ Label_Start:
 	mov	cx,	0x100
 	mov	bp,	0x8000
 	int	10h
-	jmp $
-
+	
 ; tmp end
 	
 ; find filename from Directory
 	
+	mov si, 0x8000
+	mov di, TMPFileName
+	call _Find_Filename
+	cmp ax, 0
+	jne LBANoSupport
+	jmp $
 	
 
 ; this is only a tmp solution, we will finish the CHS mode soon.
@@ -115,8 +120,8 @@ LBANoSupport:
 	
 	mov	ax,	1301h
 	mov	bx,	0004h
-	mov	dx,	0100h
-	mov	cx,	12
+	mov	dx,	0500h
+	mov	cx,	15
 	mov	bp,	LBANoSupport_msg
 	int	10h
 	jmp $
@@ -192,7 +197,7 @@ _io_block_error:
 
 _Find_Filename:
 	
-	mov cx, 11			; TODO: find the correct number
+	mov cx, 10			; TODO: find the correct number
 
 next_char:
 	
@@ -216,9 +221,9 @@ not_true:
 log:							db	"boot.bin [y]"
 LBANoSupport_msg:				db	"LBA Support [n]"
 ReadFAT32DirectoryError_msg:	db	"Read Directory [n]"
-ReadFAT32DirectorySuccess_msg:	db	"Read Directory [y]"
 LoaderPathName:					db	"BOOT       "
 LoaderFileName:					db	"LOADER  BIN"
+TMPFileName:					db	"kernel     "
 	
 
 	times 510 - ($ - $$) db 0
