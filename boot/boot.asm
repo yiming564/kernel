@@ -123,7 +123,7 @@ Loader_File_Name_Finded:
 	add ax, -2
 	mov bx, 32
 	mul bx
-;	mov ax, (4 - 2) * 32
+	mov ax, (4 - 2) * 32
 	add cx, ax
 	add si, 2
 	mov bx, 0x9000
