@@ -120,8 +120,10 @@ Loader_File_Name_Finded:
 	mov dx, word [si]
 	add si, 6
 	mov ax, word [si]
+	add ax, -2
 	mov bx, 32
 	mul bx
+;	mov ax, (4 - 2) * 32
 	add cx, ax
 	add si, 2
 	mov bx, 0x9000
@@ -129,7 +131,7 @@ Loader_File_Name_Finded:
 	
 	mov	ax,	1301h
 	mov	bx,	000fh
-	mov	dx,	0100h
+	mov	dx,	0200h
 	mov	cx,	0x100
 	mov	bp,	0x9000
 	int	10h
@@ -143,7 +145,7 @@ LBANoSupport:
 	
 	mov	ax,	1301h
 	mov	bx,	0004h
-	mov	dx,	0500h
+	mov	dx,	0100h
 	mov	cx,	15
 	mov	bp,	LBANoSupport_msg
 	int	10h
