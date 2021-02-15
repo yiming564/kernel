@@ -93,32 +93,47 @@ Label_Start:
 	cmp ax, 0
 	jne ReadFAT32DirectoryError
 	
-; tmp start
-
-	mov	ax,	1301h
-	mov	bx,	000fh
-	mov	dx,	0100h
-	mov	cx,	0x100
-	mov	bp,	0x8000
-	int	10h
-	
-; tmp end
-	
 ; find filename from Directory
 	
 	mov cx, 8
 	mov si, 0x8000
 	mov di, LoaderFileName
+	mov dx, 0
 	
 Loader_File_Name_Wrong:
 	call _Find_Filename
 	cmp ax, 0
 	je Loader_File_Name_Finded
 	add si, 0x20
+	inc dx
 	loop Loader_File_Name_Wrong
 	jmp LBANoSupport
 	
 Loader_File_Name_Finded:
+	
+	mov cx, word [BPB_FATSz32]
+	add cx, cx
+	add cx, word [BPB_HiddSec32]
+	add cx, word [BPB_RsvdSecCnt]
+
+	add si, 20
+	mov dx, word [si]
+	add si, 6
+	mov ax, word [si]
+	mov bx, 32
+	mul bx
+	add cx, ax
+	add si, 2
+	mov bx, 0x9000
+	call _io_block
+	
+	mov	ax,	1301h
+	mov	bx,	000fh
+	mov	dx,	0100h
+	mov	cx,	0x100
+	mov	bp,	0x9000
+	int	10h
+	
 	jmp $
 	
 
