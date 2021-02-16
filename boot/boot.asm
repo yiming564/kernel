@@ -115,15 +115,20 @@ Loader_File_Name_Finded:
 	add cx, cx
 	add cx, word [BPB_HiddSec32]
 	add cx, word [BPB_RsvdSecCnt]
-
+	
+	cmp si, 0x8080
+	jne LBANoSupport
+	
 	add si, 20
 	mov dx, word [si]
+	cmp dx, 0
+	jne LBANoSupport
 	add si, 6
 	mov ax, word [si]
 	add ax, -2
 	mov bx, 32
 	mul bx
-	mov ax, (4 - 2) * 32
+;	mov ax, (4 - 2) * 32
 	add cx, ax
 	add si, 2
 	mov bx, 0x9000
@@ -223,6 +228,9 @@ _io_block_error:
 _Find_Filename:
 	
 	mov cx, 10			; TODO: find the correct number
+	
+	push si
+	push di
 
 next_char:
 	
@@ -235,10 +243,16 @@ next_char:
 	
 	loop next_char	
 	
+	pop di
+	pop si
+	
 	mov ax, 0
 	ret
 	
 not_true:
+	
+	pop di
+	pop si
 
 	mov ax, 1
 	ret
