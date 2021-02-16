@@ -116,30 +116,22 @@ Loader_File_Name_Finded:
 	add cx, word [BPB_HiddSec32]
 	add cx, word [BPB_RsvdSecCnt]
 	
-	cmp si, 0x8080
-	jne LBANoSupport
-	
 	add si, 20
 	mov dx, word [si]
-	cmp dx, 0
-	jne LBANoSupport
 	add si, 6
 	mov ax, word [si]
 	add ax, -2
 	mov bx, 32
 	mul bx
-;	mov ax, (4 - 2) * 32
 	add cx, ax
 	add si, 2
+	mov di, [si]
+next_sector:
 	mov bx, 0x9000
 	call _io_block
-	
-	mov	ax,	1301h
-	mov	bx,	000fh
-	mov	dx,	0200h
-	mov	cx,	0x100
-	mov	bp,	0x9000
-	int	10h
+	dec di
+	cmp di, 0
+	je next_sector
 	
 	jmp $
 	
