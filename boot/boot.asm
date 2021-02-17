@@ -124,14 +124,16 @@ Loader_File_Name_Finded:
 	mov bx, 32
 	mul bx
 	add cx, ax
-	add si, 2
+	add si, 4
 	mov di, [si]
-next_sector:
 	mov bx, 0x9000
+	add di, 2
+next_sector:
 	call _io_block
-	dec di
+	add di, -2
+	add bx, 0x200
 	cmp di, 0
-	je next_sector
+	jbe next_sector
 	
 	jmp $
 	
