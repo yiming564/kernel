@@ -3,7 +3,9 @@ include ../include/rules.make
 
 .PHONY: clean clean_backup
 
-all:
+OBJS = kernel.bin
+
+all: $(OBJS)
 
 image_main: kernel.bin
 	cp kernel.bin /mnt
