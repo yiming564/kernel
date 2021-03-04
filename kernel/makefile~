@@ -5,7 +5,7 @@ include ../include/rules.make
 
 all:
 
-image_main: kernel.bin
+image_main:
 	cp kernel.bin /mnt
 	
 clean_backup:

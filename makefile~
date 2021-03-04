@@ -13,7 +13,6 @@ OBJS = boot/boot.bin boot/loader.bin
 
 all:
 	@$(MAKE) -C boot
-	@$(MAKE) -C kernel
 	
 install:
 	@$(MAKE) -C . image

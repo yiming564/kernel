@@ -5,6 +5,7 @@ OBJS = # boot.bin loader.bin
 .PHONY: clean clean_backup
 
 all: $(OBJS)
+	@echo 
 	
 # image_main:
 #	@$(MAKE) -C . 
