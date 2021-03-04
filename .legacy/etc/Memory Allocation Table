@@ -1,0 +1,4 @@
+
+Name		Start				End					Length
+boot.bin	0000000000007c00	0000000000007dff	200		Byte
+directory	0000000000008000	000000000000c000	4000	Byte
