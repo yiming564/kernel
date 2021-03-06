@@ -34,6 +34,6 @@ GDT_Table:
 	dq 0x0000f20000000000	; 6: User	Code	64-bit	Segment	0x30
 	dq 0x00cf9a000000ffff	; 7: Kernel	Code	32-bit	Segment	0x38
 	dq 0x00cf92000000ffff	; 8: Kernel	Data	32-bit	Segment	0x40
-	times 3 dq 
+	dq 
 	
 GDT_END:
